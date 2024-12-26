@@ -574,9 +574,26 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                       <Dropdown
                         value={fontFamily}
                         options={[
-                          { name: "Arial", code: "Arial" },
-                          { name: "Roboto", code: "Roboto" },
-                        ]}
+  { name: "Arial", code: "Arial" },
+  { name: "Noto Sans", code: "Noto Sans" },
+  { name: "Roboto", code: "Roboto" },
+  { name: "DM Sans", code: "DM Sans" },
+  { name: "Nunito", code: "Nunito" },
+  { name: "Roboto Condensed", code: "Roboto Condensed" },
+  { name: "Inter", code: "Inter" },
+  { name: "Open Sans", code: "Open Sans" },
+  { name: "Roboto Mono", code: "Roboto Mono" },
+  { name: "Itim", code: "Itim" },
+  { name: "Oswald", code: "Oswald" },
+  { name: "Rubik", code: "Rubik" },
+  { name: "Kanit", code: "Kanit" },
+  { name: "Playfair Display", code: "Playfair Display" },
+  { name: "Ubuntu", code: "Ubuntu" },
+  { name: "Lato", code: "Lato" },
+  { name: "Poppins", code: "Poppins" },
+  { name: "Montserrat", code: "Montserrat" },
+  { name: "Raleway", code: "Raleway" }
+]}
                         onChange={(e) => setFontFamily(e.value)}
                         placeholder="Font Family"
                         optionLabel="name"
