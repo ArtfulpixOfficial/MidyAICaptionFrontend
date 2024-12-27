@@ -26,6 +26,7 @@ const VideoContext = createContext({
 
 const CustomVideoProvider = ({ children }) => {
   const [inputVideo, setInputVideo] = useState(null);
+  const [language, setLanguage] = useState({ name: "English", code: "en" });
   const [isLoading, setIsLoading] = useState(false);
   const [outputVideo, setOutputVideo] = useState(null);
   const [subtitle, setSubtitle] = useState("");
@@ -68,6 +69,8 @@ const CustomVideoProvider = ({ children }) => {
     <VideoContext.Provider
       value={{
         inputVideo,
+        language,
+        setLanguage,
         setInputVideo,
         isLoading,
         setIsLoading,
@@ -119,6 +122,8 @@ const CustomVideoProvider = ({ children }) => {
 const useVideoContext = () => {
   const {
     inputVideo,
+    language,
+    setLanguage,
     outputVideo,
     setInputVideo,
     setOutputVideo,
@@ -204,6 +209,8 @@ const useVideoContext = () => {
     setAnimationDelay,
     effect,
     setEffect,
+    language,
+    setLanguage,
   };
 };
 

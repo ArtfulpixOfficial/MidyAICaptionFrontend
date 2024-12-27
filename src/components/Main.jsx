@@ -168,7 +168,10 @@ export function Main() {
     setAnimationDuration,
     effect,
     setEffect,
+    language,
+    setLanguage,
   } = useVideoContext();
+  const [uploadedFile, setUploadedFile] = useState(null);
 
   const convertToASS = () => {
     let assHeader = `[Script Info]
@@ -367,17 +370,24 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     // setLoadingStatus("Done");
     // setIsLoading(false);
   };
-
   async function onFileChange(file) {
+    setUploadedFile(file);
+  }
+
+  async function generateCaptions() {
     // setInputVideo(file);
     // console.log(file.name.slice(-4));
+    if (!uploadedFile || !language) return;
+    const file = uploadedFile;
     setLoadingStatus("Uploading...");
     setIsLoading(true);
     const resSubtitle = await openai.audio.transcriptions.create({
       model: "whisper-1",
       file: file,
       response_format: "srt",
+      language: language.code,
     });
+
     setJsonSubtitleData(parseSRT(resSubtitle.slice(0, -1)));
     const srtBlob = new Blob([resSubtitle.slice(0, -1)], {
       type: "text/plain",
@@ -411,6 +421,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     setSubtitle(subtitlePublicUrl);
     setIsLoading(false);
     setLoadingStatus("Done");
+    setUploadedFile(null);
   }
 
   const onEditorValueChange = (props, value) => {
@@ -535,8 +546,110 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
       )}
       {!outputVideo && !inputVideo && !isLoading && !subtitle && (
         <>
-          <Message />
-          <UploadFile onFileChange={onFileChange} />
+          {!uploadedFile ? (
+            <>
+              <Message />
+              <UploadFile onFileChange={onFileChange} />
+            </>
+          ) : (
+            <section className="imageSection mb-0">
+              <video
+                controls
+                width={850}
+                height={500}
+                src={URL.createObjectURL(uploadedFile)}
+                alt="originalImage"
+                // autoPlay
+
+                className="original-image"
+                id="blurred"
+                style={{
+                  border: "none",
+                  borderRadius: "20px",
+                }}
+              />
+            </section>
+          )}
+          <div className="grid mt-5 flex align-items-center w-full justify-content-center gap-4">
+            <div className="col-2 flex flex-column align-items-center">
+              <label className="text-800 font-semibold text-white">
+                Captions Language
+              </label>
+              <Dropdown
+                value={language}
+                options={[
+                  { name: "Afrikaans", code: "af" },
+                  { name: "Arabic", code: "ar" },
+                  { name: "Armenian", code: "hy" },
+                  { name: "Azerbaijani", code: "az" },
+                  { name: "Belarusian", code: "be" },
+                  { name: "Bosnian", code: "bs" },
+                  { name: "Bulgarian", code: "bg" },
+                  { name: "Catalan", code: "ca" },
+                  { name: "Chinese", code: "zh" },
+                  { name: "Croatian", code: "hr" },
+                  { name: "Czech", code: "cs" },
+                  { name: "Danish", code: "da" },
+                  { name: "Dutch", code: "nl" },
+                  { name: "English", code: "en" },
+                  { name: "Estonian", code: "et" },
+                  { name: "Finnish", code: "fi" },
+                  { name: "French", code: "fr" },
+                  { name: "Galician", code: "gl" },
+                  { name: "German", code: "de" },
+                  { name: "Greek", code: "el" },
+                  { name: "Hebrew", code: "he" },
+                  { name: "Hindi", code: "hi" },
+                  { name: "Hungarian", code: "hu" },
+                  { name: "Icelandic", code: "is" },
+                  { name: "Indonesian", code: "id" },
+                  { name: "Italian", code: "it" },
+                  { name: "Japanese", code: "ja" },
+                  { name: "Kannada", code: "kn" },
+                  { name: "Kazakh", code: "kk" },
+                  { name: "Korean", code: "ko" },
+                  { name: "Latvian", code: "lv" },
+                  { name: "Lithuanian", code: "lt" },
+                  { name: "Macedonian", code: "mk" },
+                  { name: "Malay", code: "ms" },
+                  { name: "Marathi", code: "mr" },
+                  { name: "Maori", code: "mi" },
+                  { name: "Nepali", code: "ne" },
+                  { name: "Norwegian", code: "no" },
+                  { name: "Persian", code: "fa" },
+                  { name: "Polish", code: "pl" },
+                  { name: "Portuguese", code: "pt" },
+                  { name: "Romanian", code: "ro" },
+                  { name: "Russian", code: "ru" },
+                  { name: "Serbian", code: "sr" },
+                  { name: "Slovak", code: "sk" },
+                  { name: "Slovenian", code: "sl" },
+                  { name: "Spanish", code: "es" },
+                  { name: "Swahili", code: "sw" },
+                  { name: "Swedish", code: "sv" },
+                  { name: "Tagalog", code: "tl" },
+                  { name: "Tamil", code: "ta" },
+                  { name: "Thai", code: "th" },
+                  { name: "Turkish", code: "tr" },
+                  { name: "Ukrainian", code: "uk" },
+                  { name: "Urdu", code: "ur" },
+                  { name: "Vietnamese", code: "vi" },
+                  { name: "Welsh", code: "cy" },
+                ]}
+                onChange={(e) => setLanguage(e.value)}
+                placeholder="Captions Language"
+                optionLabel="name"
+                className="w-full p-2 mt-2 py-3"
+                checkmark
+              />
+            </div>
+            <div className="col-2 grid flex align-items-center pt-6 pb-3">
+              <Button
+                className="btnBack show col py-3"
+                onClick={generateCaptions}
+              >{`Generate Captions`}</Button>
+            </div>
+          </div>
         </>
       )}
       {!outputVideo && inputVideo && !isLoading && subtitle && (
@@ -574,26 +687,32 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                       <Dropdown
                         value={fontFamily}
                         options={[
-  { name: "Arial", code: "Arial" },
-  { name: "Noto Sans", code: "Noto Sans" },
-  { name: "Roboto", code: "Roboto" },
-  { name: "DM Sans", code: "DM Sans" },
-  { name: "Nunito", code: "Nunito" },
-  { name: "Roboto Condensed", code: "Roboto Condensed" },
-  { name: "Inter", code: "Inter" },
-  { name: "Open Sans", code: "Open Sans" },
-  { name: "Roboto Mono", code: "Roboto Mono" },
-  { name: "Itim", code: "Itim" },
-  { name: "Oswald", code: "Oswald" },
-  { name: "Rubik", code: "Rubik" },
-  { name: "Kanit", code: "Kanit" },
-  { name: "Playfair Display", code: "Playfair Display" },
-  { name: "Ubuntu", code: "Ubuntu" },
-  { name: "Lato", code: "Lato" },
-  { name: "Poppins", code: "Poppins" },
-  { name: "Montserrat", code: "Montserrat" },
-  { name: "Raleway", code: "Raleway" }
-]}
+                          { name: "Arial", code: "Arial" },
+                          { name: "Noto Sans", code: "Noto Sans" },
+                          { name: "Roboto", code: "Roboto" },
+                          { name: "DM Sans", code: "DM Sans" },
+                          { name: "Nunito", code: "Nunito" },
+                          {
+                            name: "Roboto Condensed",
+                            code: "Roboto Condensed",
+                          },
+                          { name: "Inter", code: "Inter" },
+                          { name: "Open Sans", code: "Open Sans" },
+                          { name: "Roboto Mono", code: "Roboto Mono" },
+                          { name: "Itim", code: "Itim" },
+                          { name: "Oswald", code: "Oswald" },
+                          { name: "Rubik", code: "Rubik" },
+                          { name: "Kanit", code: "Kanit" },
+                          {
+                            name: "Playfair Display",
+                            code: "Playfair Display",
+                          },
+                          { name: "Ubuntu", code: "Ubuntu" },
+                          { name: "Lato", code: "Lato" },
+                          { name: "Poppins", code: "Poppins" },
+                          { name: "Montserrat", code: "Montserrat" },
+                          { name: "Raleway", code: "Raleway" },
+                        ]}
                         onChange={(e) => setFontFamily(e.value)}
                         placeholder="Font Family"
                         optionLabel="name"
@@ -859,7 +978,6 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                 alt="originalImage"
                 // autoPlay
                 className="w-full"
-                muted
                 id="blurred"
                 style={{
                   border: "none",

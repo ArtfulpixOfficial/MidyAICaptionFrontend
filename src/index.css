@@ -168,11 +168,11 @@ form {
 
 .upload-box {
   display: flex;
-  padding: 120px;
+  padding: 60px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%; /* Ensure it fills the container */
+  height: auto; /* Ensure it fills the container */
   border-radius: 5px;
 }
 .upload-box:hover {
