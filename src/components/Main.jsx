@@ -663,30 +663,32 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
         >
           <div
             className="flex mb-4 align-items-stretch"
-            style={{ maxHeight: "85vh" }}
+            style={{ minHeight: "60vh", maxHeight: "95vh" }}
           >
             <div
-              className="card col-6 bg-white flex flex-column min-h-full"
+              className="card col-6 bg-white flex flex-column"
               style={{
                 border: "none",
                 borderRadius: "20px",
+                overflow: "hidden",
               }}
             >
-              <TabView>
+              <TabView className="h-full" scrollable={true}>
                 <TabPanel
                   header="Style"
-                  // headerClassName="py-3"
-                  className="mr-4"
+                  contentClassName="overflow-y-auto" // Enable vertical scrolling
                   headerClassName="ml-4"
+                  style={{ maxHeight: "calc(95vh - 3rem)" }} // Subtract header height
                 >
-                  <div className="row flex py-2">
-                    <div className="col-3 flex flex-column">
-                      <label className="text-800 font-semibold">
-                        Font Family
-                      </label>
-                      <Dropdown
-                        value={fontFamily}
-                        options={[
+                  <div className="p-2">
+                    <div className="grid grid-nogutter py-2">
+                      <div className="col-3 flex flex-column mr-4 mb-3">
+                        <label className="text-800 font-semibold mb-2">
+                          Font Family
+                        </label>
+                        <Dropdown
+                          value={fontFamily}
+                          options={[
                           { name: "Arial", code: "Arial" },
                           { name: "Noto Sans", code: "Noto Sans" },
                           { name: "Roboto", code: "Roboto" },
@@ -713,188 +715,186 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                           { name: "Montserrat", code: "Montserrat" },
                           { name: "Raleway", code: "Raleway" },
                         ]}
-                        onChange={(e) => setFontFamily(e.value)}
-                        placeholder="Font Family"
-                        optionLabel="name"
-                        className="w-full p-2 mt-2 py-3"
-                        checkmark
-                      />
-                    </div>
-                    <div className="col-3 flex flex-column">
-                      <label className="text-800 font-semibold">
-                        Font Size
-                      </label>
-                      <Dropdown
-                        value={fontSize}
-                        options={fontSizeOptions}
-                        onChange={(e) => setFontSize(e.value)}
-                        placeholder="Font Size"
-                        optionLabel="name"
-                        className="w-full p-2 mt-2 py-3"
-                        checkmark
-                      />
-                    </div>
-                    <div className="col-3 flex flex-column align-items-center py-0 justify-content-end">
-                      <label className="text-800 font-semibold px-3 text-center">
-                        Fill
-                      </label>
-                      <ColorPicker
-                        value={primaryColour}
-                        onChange={(e) => setPrimaryColour(e.value)}
-                        className="py-2 px-3"
-                        inputClassName="w-full"
-                      />
-                    </div>
-                  </div>
-                  <div className="row flex py-2">
-                    <div className="col-6 flex flex-column">
-                      <label className="text-800 font-semibold">
-                        Background Width
-                      </label>
-                      <Dropdown
-                        value={backgroundWidth}
-                        options={backGroundWidthOptions}
-                        onChange={(e) => setBackgroundWidth(e.value)}
-                        placeholder="Background Width"
-                        optionLabel="name"
-                        className="w-full p-2 mt-2 py-3"
-                        checkmark
-                      />
-                    </div>
-                    <div className="col-3 flex flex-column align-items-center py-0 justify-content-end">
-                      <label className="text-800 font-semibold px-3 text-center">
-                        Background
-                      </label>
-                      <ColorPicker
-                        value={backColour}
-                        onChange={(e) => setBackColour(e.value)}
-                        className="py-2 px-3"
-                        inputClassName="w-full"
-                      />
-                    </div>
-                  </div>
-                  <div className="row flex py-2">
-                    <div className="col-4 flex flex-column">
-                      <label className="text-800 font-semibold pt-2">
-                        Outline Width
-                      </label>
-                      <Dropdown
-                        value={outlineWidth}
-                        options={outlineWidthOptions}
-                        onChange={(e) => setOutlineWidth(e.value)}
-                        placeholder="Outline Width"
-                        optionLabel="name"
-                        className="w-full p-2 mt-2 py-3"
-                        checkmark
-                      />
-                    </div>
-                    <div className="col-4 flex flex-column">
-                      <label className="text-800 font-semibold pt-2">
-                        Letter Spacing
-                      </label>
-                      <Dropdown
-                        value={spacing}
-                        options={spacingOptions}
-                        onChange={(e) => setSpacing(e.value)}
-                        placeholder="Letter Spacing"
-                        optionLabel="name"
-                        className="w-full p-2 mt-2 py-3"
-                        checkmark
-                      />
-                    </div>
-                    <div className="col-3 flex flex-column">
-                      <label className="text-800 font-semibold pt-2">
-                        Position
-                      </label>
-                      <Dropdown
-                        value={position}
-                        options={positionOptions}
-                        onChange={(e) => setPosition(e.value)}
-                        placeholder="Adjust Position"
-                        optionLabel="name"
-                        className="w-full p-2 mt-2 py-3"
-                        checkmark
-                      />
-                    </div>
-                  </div>
-                  <div className="row flex py-2">
-                    <div className="col-3">
-                      <PrimeButton
-                        icon={<FormatBoldIcon />}
-                        size="large"
-                        outlined
-                        severity={!isBold ? "secondary" : "contrast"}
-                        aria-label="Filter"
-                        className={`w-full h-full py-3`}
-                        onClick={() => setIsBold(!isBold)}
-                      />
-                    </div>
-                    <div className="col-3">
-                      <PrimeButton
-                        icon={<FormatItalicIcon />}
-                        size="large"
-                        outlined
-                        severity={!isItalic ? "secondary" : "contrast"}
-                        aria-label="Filter"
-                        className={`w-full h-full py-3`}
-                        onClick={() => setIsItalic(!isItalic)}
-                      />
-                    </div>
-                    <div className="col-3">
-                      <PrimeButton
-                        // text
-                        icon={<FormatUnderlinedIcon />}
-                        severity={!isUnderline ? "secondary" : "contrast"}
-                        size="large"
-                        className={`w-full h-full py-3`}
-                        onClick={() => setIsUnderline(!isUnderline)}
-                        outlined
-                        aria-label="Filter"
-                      />
-                    </div>
-                  </div>
-                  <div className="row flex py-2">
-                    <div className="col-4 flex flex-column">
-                      <label className="text-800 font-semibold">
-                        Animation
-                      </label>
-                      <Dropdown
-                        value={animation}
-                        options={animationOptions}
-                        onChange={(e) => setAnimation(e.value)}
-                        placeholder="Select Animation"
-                        optionLabel="name"
-                        className="w-full p-2 mt-2 py-3"
-                        checkmark
-                      />
-                    </div>
-                    {animation.code !== "none" && (
-                      <div className="col-4 flex flex-column">
-                        <label className="text-800 font-semibold">
-                          Animation Duration
+                          onChange={(e) => setFontFamily(e.value)}
+                          placeholder="Font Family"
+                          optionLabel="name"
+                          className="w-full py-3 pl-2"
+                          checkmark
+                        />
+                      </div>
+                      <div className="col-3 flex flex-column mr-4">
+                        <label className="text-800 font-semibold mb-2">
+                          Font Size
                         </label>
                         <Dropdown
-                          value={animationDuration}
-                          options={animationDurationOptions}
-                          onChange={(e) => setAnimationDuration(e.value)}
-                          placeholder="Duration"
+                          value={fontSize}
+                          options={fontSizeOptions}
+                          onChange={(e) => setFontSize(e.value)}
+                          placeholder="Font Size"
+                          optionLabel="name"
+                          className="w-full py-3 pl-2"
+                          checkmark
+                        />
+                      </div>
+                      <div className="col-2 flex flex-column align-items-center">
+                        <label className="text-800 font-semibold text-center">
+                          Fill
+                        </label>
+                        <ColorPicker
+                          value={primaryColour}
+                          onChange={(e) => setPrimaryColour(e.value)}
+                          className="pt-2 flex justify-content-center w-6"
+                          // className="w-full"
+                          inputClassName="w-full"
+                        />
+                      </div>
+                      <div className="col-2 flex flex-column align-items-center">
+                        <label className="text-800 font-semibold px-3 text-center">
+                          Background
+                        </label>
+                        <ColorPicker
+                          value={backColour}
+                          onChange={(e) => setBackColour(e.value)}
+                          className="pt-2 w-6"
+                          inputClassName="w-full"
+                        />
+                      </div>
+
+                      <div className="col-5 flex flex-column mr-4">
+                        <label className="text-800 font-semibold">
+                          Background Width
+                        </label>
+                        <Dropdown
+                          value={backgroundWidth}
+                          options={backGroundWidthOptions}
+                          onChange={(e) => setBackgroundWidth(e.value)}
+                          placeholder="Background Width"
                           optionLabel="name"
                           className="w-full p-2 mt-2 py-3"
                           checkmark
                         />
                       </div>
-                    )}
-                    <div className="col-4 flex flex-column">
-                      <label className="text-800 font-semibold">Effect</label>
-                      <Dropdown
-                        value={effect}
-                        options={effectOptions}
-                        onChange={(e) => setEffect(e.value)}
-                        placeholder="Select Effect"
-                        optionLabel="name"
-                        className="w-full p-2 mt-2 py-3"
-                        checkmark
-                      />
+
+                      <div className="col-2 flex align-items-end justify-content-end">
+                        <PrimeButton
+                          icon={<FormatBoldIcon />}
+                          size="large"
+                          outlined
+                          severity={!isBold ? "secondary" : "contrast"}
+                          aria-label="Filter"
+                          className={`py-3 w-6`}
+                          onClick={() => setIsBold(!isBold)}
+                        />
+                      </div>
+                      <div className="col-2 flex align-items-end justify-content-center">
+                        <PrimeButton
+                          icon={<FormatItalicIcon />}
+                          size="large"
+                          outlined
+                          severity={!isItalic ? "secondary" : "contrast"}
+                          aria-label="Filter"
+                          className={`py-3 w-6`}
+                          onClick={() => setIsItalic(!isItalic)}
+                        />
+                      </div>
+                      <div className="col-2 flex align-items-end justify-content-start">
+                        <PrimeButton
+                          // text
+                          icon={<FormatUnderlinedIcon />}
+                          severity={!isUnderline ? "secondary" : "contrast"}
+                          size="large"
+                          className={`py-3 w-6`}
+                          onClick={() => setIsUnderline(!isUnderline)}
+                          outlined
+                          aria-label="Filter"
+                        />
+                      </div>
+
+                      <div className="col-3 flex flex-column my-3">
+                        <label className="text-800 font-semibold pt-2">
+                          Outline Width
+                        </label>
+                        <Dropdown
+                          value={outlineWidth}
+                          options={outlineWidthOptions}
+                          onChange={(e) => setOutlineWidth(e.value)}
+                          placeholder="Outline Width"
+                          optionLabel="name"
+                          className="w-full p-2 mt-2 py-3"
+                          checkmark
+                        />
+                      </div>
+                      <div className="col-3 flex flex-column mx-5 my-3">
+                        <label className="text-800 font-semibold pt-2">
+                          Letter Spacing
+                        </label>
+                        <Dropdown
+                          value={spacing}
+                          options={spacingOptions}
+                          onChange={(e) => setSpacing(e.value)}
+                          placeholder="Letter Spacing"
+                          optionLabel="name"
+                          className="w-full p-2 mt-2 py-3"
+                          checkmark
+                        />
+                      </div>
+                      <div className="col-3 flex flex-column my-3">
+                        <label className="text-800 font-semibold pt-2">
+                          Position
+                        </label>
+                        <Dropdown
+                          value={position}
+                          options={positionOptions}
+                          onChange={(e) => setPosition(e.value)}
+                          placeholder="Adjust Position"
+                          optionLabel="name"
+                          className="w-full p-2 mt-2 py-3"
+                          checkmark
+                        />
+                      </div>
+
+                      <div className="col-4 flex flex-column mr-2">
+                        <label className="text-800 font-semibold">
+                          Animation
+                        </label>
+                        <Dropdown
+                          value={animation}
+                          options={animationOptions}
+                          onChange={(e) => setAnimation(e.value)}
+                          placeholder="Select Animation"
+                          optionLabel="name"
+                          className="w-full p-2 mt-2 py-3"
+                          checkmark
+                        />
+                      </div>
+                      {animation.code !== "none" && (
+                        <div className="col-3 flex flex-column">
+                          <label className="text-800 font-semibold">
+                            Animation Duration
+                          </label>
+                          <Dropdown
+                            value={animationDuration}
+                            options={animationDurationOptions}
+                            onChange={(e) => setAnimationDuration(e.value)}
+                            placeholder="Duration"
+                            optionLabel="name"
+                            className="w-full p-2 mt-2 py-3"
+                            checkmark
+                          />
+                        </div>
+                      )}
+                      <div className="col-4 flex flex-column ml-2">
+                        <label className="text-800 font-semibold">Effect</label>
+                        <Dropdown
+                          value={effect}
+                          options={effectOptions}
+                          onChange={(e) => setEffect(e.value)}
+                          placeholder="Select Effect"
+                          optionLabel="name"
+                          className="w-full p-2 mt-2 py-3"
+                          checkmark
+                        />
+                      </div>
                     </div>
                   </div>
                 </TabPanel>
